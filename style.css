@@ -1,0 +1,637 @@
+/* ==========================================================================
+   1. VARIABLES & COLOR SYSTEMS (Light/Dark Mode)
+   ========================================================================== */
+:root {
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    
+    /* Light Theme (Default) */
+    --bg-app: #f4f6f8;
+    --bg-surface: #ffffff;
+    --bg-surface-subtle: #f8fafc;
+    --border-color: #e2e8f0;
+    --border-focus: #3b82f6;
+    
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --text-light: #94a3b8;
+    
+    --primary: #1a56db;
+    --primary-hover: #1e429f;
+    --primary-light: #e1effe;
+    --secondary: #4b5563;
+    --secondary-hover: #374151;
+    --accent: #0d9488;
+    --danger: #e11d48;
+    --danger-hover: #be123c;
+    
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    
+    --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    --a4-width: 210mm;
+    --a4-height: 297mm;
+    --preview-scale: 1;
+}
+
+/* Dark Theme Overrides */
+[data-theme="dark"] {
+    --bg-app: #0f172a;
+    --bg-surface: #1e293b;
+    --bg-surface-subtle: #334155;
+    --border-color: #334155;
+    --border-focus: #60a5fa;
+    
+    --text-main: #f8fafc;
+    --text-muted: #cbd5e1;
+    --text-light: #64748b;
+    
+    --primary: #3b82f6;
+    --primary-hover: #60a5fa;
+    --primary-light: #1e3a8a;
+    --secondary: #94a3b8;
+    --secondary-hover: #cbd5e1;
+    
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+}
+
+/* ==========================================================================
+   2. BASE RESET & ACCESSIBILITY
+   ========================================================================== */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-sans);
+    background-color: var(--bg-app);
+    color: var(--text-main);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+/* ==========================================================================
+   3. LAYOUT STRUCTURE (Desktop/Tablet/Mobile Grid)
+   ========================================================================== */
+.app-header {
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 0 2rem;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    box-shadow: var(--shadow-sm);
+}
+
+.header-container {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-container .app-logo {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: var(--primary);
+}
+
+.controls-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.control-group label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+/* Master Grid Structure */
+.workspace-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 2rem;
+    height: calc(100vh - 70px);
+    overflow: hidden;
+}
+
+.editor-panel {
+    background-color: var(--bg-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    padding: 2rem;
+    overflow-y: auto;
+    box-shadow: var(--shadow-sm);
+}
+
+.preview-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+    padding: 0 1rem 2rem 1rem;
+}
+
+.preview-sticky-controls {
+    position: sticky;
+    top: 0;
+    background-color: var(--bg-app);
+    width: 100%;
+    padding: 1rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+    margin-bottom: 1rem;
+}
+
+/* ==========================================================================
+   4. FORM ELEMENTS & COMPONENTS (Cards, Inputs, Buttons)
+   ========================================================================== */
+.panel-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+}
+
+.form-section {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    background-color: var(--bg-surface-subtle);
+    transition: var(--transition);
+}
+
+.form-section:focus-within {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 1px var(--border-focus);
+}
+
+.form-section legend {
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 0 0.5rem;
+    color: var(--primary);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    margin-top: 0.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.form-group.full-width {
+    grid-column: span 2;
+}
+
+label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="url"],
+select,
+textarea {
+    width: 100%;
+    padding: 0.625rem 0.875rem;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-main);
+    transition: var(--transition);
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+textarea {
+    resize: vertical;
+}
+
+/* Custom Buttons Styling */
+.btn {
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.625rem 1.25rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+}
+
+.btn-primary { background-color: var(--primary); color: #ffffff; }
+.btn-primary:hover { background-color: var(--primary-hover); }
+
+.btn-secondary { background-color: var(--bg-surface); border-color: var(--border-color); color: var(--text-main); }
+.btn-secondary:hover { background-color: var(--bg-surface-subtle); border-color: var(--text-muted); }
+
+.btn-add {
+    width: 100%;
+    margin-top: 1rem;
+    background-color: var(--primary-light);
+    color: var(--primary);
+    border: 1px dashed var(--primary);
+}
+.btn-add:hover { background-color: var(--primary); color: #ffffff; }
+
+.btn-print { background-color: var(--accent); color: white; font-size: 1rem; padding: 0.75rem 1.5rem; border-radius: var(--radius-md); box-shadow: var(--shadow-md); }
+.btn-print:hover { transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+
+/* Dynamic Closable Item Wrapper Styles */
+.dynamic-item {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    position: relative;
+}
+.btn-remove-item {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: none;
+    border: none;
+    color: var(--danger);
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* 🆕 커스텀 파일 업로드 컴포넌트 UI 스타일 추가 */
+.custom-file-upload-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 6px;
+    width: 100%;
+}
+.file-name-text {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+label#btn-choose-file {
+    margin: 0;
+    cursor: pointer;
+    display: inline-block;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    background-color: var(--bg-surface-subtle);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    transition: var(--transition);
+}
+label#btn-choose-file:hover {
+    background-color: var(--border-color);
+}
+
+/* ==========================================================================
+   5. A4 RESUME PREVIEW CONTAINER (Sizing & Scaling Mock)
+   ========================================================================== */
+.a4-page {
+    width: var(--a4-width);
+    min-height: var(--a4-height);
+    background-color: #ffffff;
+    color: #1e293b;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    box-sizing: border-box;
+    padding: 20mm;
+    overflow: hidden;
+    transform-origin: top center;
+    transition: transform 0.2s ease;
+}
+
+.preview-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #94a3b8;
+    text-align: center;
+    font-style: italic;
+    padding: 4rem;
+    border: 2px dashed #cbd5e1;
+    border-radius: var(--radius-md);
+    margin-top: 50mm;
+}
+
+/* ==========================================================================
+   6. RESUME TEMPLATES (4 Distinct Production Styles Layout)
+   ========================================================================== */
+
+/* --- TEMPLATE 1: MODERN CORPORATE --- */
+.template-modern {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.4;
+}
+.template-modern .resume-header { border-bottom: 3px solid #1e3a8a; padding-bottom: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+.template-modern h1 { font-size: 26pt; font-weight: 700; color: #1e3a8a; text-transform: uppercase; letter-spacing: -1px; }
+.template-modern h2 { font-size: 14pt; font-weight: 600; color: #0f172a; margin-top: 5px; }
+.template-modern .contact-strip { font-size: 9pt; color: #475569; display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+.template-modern .section-title { font-size: 13pt; font-weight: 700; color: #1e3a8a; border-bottom: 1px solid #e2e8f0; padding-bottom: 3px; margin: 18px 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px; }
+.template-modern .experience-item, .template-modern .education-item { margin-bottom: 12px; }
+.template-modern .item-meta { display: flex; justify-content: space-between; align-items: baseline; }
+.template-modern .item-meta h3 { font-size: 10pt; font-weight: 600; color: #1e293b; margin: 0; }
+.template-modern .item-meta span { font-size: 10pt; color: #1e293b; }
+.template-modern .item-sub { display: flex; justify-content: space-between; font-style: italic; font-size: 9.5pt; color: #475569; margin-bottom: 4px; }
+.template-modern .item-desc { font-size: 9.5pt; color: #334155; }
+.template-modern .skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; font-size: 9.5pt; }
+
+/* --- TEMPLATE 2: ATS FRIENDLY --- */
+.template-classic {
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.3;
+    padding: 15mm 15mm !important;
+}
+.template-classic .resume-header { text-align: center; margin-bottom: 15px; }
+.template-classic h1 { font-size: 22pt; font-weight: bold; color: #000000; margin-bottom: 2px; }
+.template-classic h2 { font-size: 12pt; font-weight: normal; font-style: italic; color: #333333; margin-bottom: 5px; }
+.template-classic .contact-strip { font-size: 9.5pt; justify-content: center; display: flex; gap: 8px; border-bottom: 1px solid #000000; padding-bottom: 8px; }
+.template-classic .section-title { font-size: 11pt; font-weight: bold; color: #000000; text-transform: uppercase; border-bottom: 1px solid #000000; margin: 14px 0 6px 0; letter-spacing: 0.5px; }
+.template-classic .item-meta { display: flex; justify-content: space-between; align-items: baseline; }
+.template-classic .item-meta h3 { font-size: 10pt; font-weight: bold; margin: 0; }
+.template-classic .item-sub { display: flex; justify-content: space-between; font-weight: bold; font-size: 10pt; }
+.template-classic .item-desc { font-size: 10pt; margin-top: 2px; text-align: justify; }
+
+/* --- TEMPLATE 3: EXECUTIVE --- */
+.template-creative {
+    border-top: 8px solid #854d0e;
+}
+.template-creative .resume-header { margin-bottom: 25px; }
+.template-creative h1 { font-size: 28pt; font-weight: 300; color: #0f172a; margin-bottom: 0; }
+.template-creative h2 { font-size: 13pt; font-weight: 500; color: #854d0e; text-transform: uppercase; letter-spacing: 1.5px; }
+.template-creative .contact-strip { font-size: 9pt; background: #f8fafc; padding: 8px 12px; border-radius: 4px; margin-top: 10px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+.template-creative .section-title { font-size: 12pt; font-weight: 600; color: #0f172a; text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 10px 0; display: flex; align-items: center; gap: 10px; }
+.template-creative .section-title::after { content: ''; flex: 1; height: 1px; background: #cbd5e1; }
+.template-creative .item-meta { display: flex; justify-content: space-between; align-items: baseline; }
+.template-creative .item-meta h3 { font-size: 10.5pt; font-weight: 600; margin: 0; }
+.template-creative .item-sub { font-size: 9.5pt; color: #64748b; margin-bottom: 4px; }
+
+/* --- TEMPLATE 4: CREATIVE MINIMAL --- */
+.template-creative-minimal {
+    padding: 0 !important;
+    display: grid !important;
+    grid-template-columns: 75mm 135mm;
+    min-height: var(--a4-height);
+}
+.template-creative-minimal .sidebar { background-color: #1e293b; color: #f8fafc; padding: 20mm 10mm; }
+.template-creative-minimal .main-content { padding: 20mm 12mm; background-color: #ffffff; color: #1e293b; }
+.template-creative-minimal .sidebar h1 { font-size: 20pt; font-weight: 700; color: #ffffff; line-height: 1.2; }
+.template-creative-minimal .sidebar h2 { font-size: 11pt; color: #38bdf8; margin-top: 5px; margin-bottom: 20px; }
+.template-creative-minimal .sidebar .contact-info { font-size: 8.5pt; display: flex; flex-direction: column; gap: 8px; margin-bottom: 25px; }
+.template-creative-minimal .sidebar .section-title { font-size: 11pt; color: #f1f5f9; border-bottom: 1px solid #475569; padding-bottom: 4px; margin-bottom: 10px; text-transform: uppercase; }
+.template-creative-minimal .main-content .section-title { font-size: 13pt; font-weight: 700; color: #1e293b; border-left: 4px solid #38bdf8; padding-left: 8px; margin: 22px 0 12px 0; text-transform: uppercase; }
+.template-creative-minimal .item-meta { display: flex; justify-content: space-between; align-items: baseline; }
+.template-creative-minimal .item-meta h3 { font-size: 10pt; font-weight: 600; margin: 0; }
+
+.preview-avatar { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; float: right; margin-left: 15px; }
+
+/* ==========================================================================
+   7. RESPONSIVE BREAKPOINTS (Tablet & Mobile UI)
+   ========================================================================== */
+@media (max-width: 1200px) {
+    .workspace-container {
+        grid-template-columns: 1fr;
+        height: auto;
+        overflow: visible;
+    }
+    .editor-panel, .preview-panel {
+        overflow-y: visible;
+        height: auto;
+    }
+    .preview-panel {
+        padding-top: 2rem;
+        border-top: 2px dashed var(--border-color);
+    }
+}
+
+@media (max-width: 768px) {
+    .app-header {
+        padding: 0 1rem;
+        height: auto;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+    .header-container {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    .controls-nav {
+        flex-wrap: wrap;
+        width: 100%;
+        gap: 0.75rem;
+    }
+    .workspace-container {
+        padding: 1rem;
+    }
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    .form-group.full-width {
+        grid-column: span 1;
+    }
+    .a4-page {
+        transform: scale(0.45);
+        transform-origin: top left;
+        margin-left: 0;
+    }
+    .preview-panel {
+        width: 100%;
+        overflow-x: auto;
+        align-items: flex-start;
+    }
+}
+
+/* ==========================================================================
+   8. SKILLS CHIPS & INTERFACE TWEAKS
+   ========================================================================== */
+.skills-chips span {
+    background-color: var(--primary-light, #e1effe);
+    color: var(--primary, #1a56db);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 8.5pt;
+    font-weight: 500;
+    display: inline-block;
+}
+
+#a4-preview-container, .a4-page {
+    background-color: #ffffff !important;
+    color: #1e293b !important;
+}
+
+.template-creative-minimal .sidebar .section-title {
+    color: #f1f5f9 !important;
+}
+.template-creative-minimal .sidebar p, 
+.template-creative-minimal .sidebar span,
+.template-creative-minimal .sidebar strong {
+    color: #cbd5e1 !important;
+}
+
+/* ==========================================================================
+   9. PRINT STYLESHEET (통합 초정밀 엔진 적용: 빈 페이지 & 브라우저 정보 완전 제거)
+   ========================================================================== */
+@media print {
+    @page {
+        margin: 0; /* 브라우저 기본 강제 상/하단 메타데이터(날짜/URL) 전면 제거 */
+        size: A4 portrait; /* A4 규격 수직 고정 */
+    }
+    
+    html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        height: 100% !important;
+        overflow: hidden !important; /* 초과 서적 오버플로우 강제 컷으로 공백지 생성 원천 차단 */
+        background-color: #ffffff !important;
+        color: #1e293b !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    /* 화면용 인터페이스 컴포넌트 완전 은닉 */
+    .app-header, 
+    .editor-panel, 
+    .preview-sticky-controls, 
+    .btn, 
+    button, 
+    form,
+    .preview-placeholder {
+        display: none !important;
+    }
+
+    .workspace-container, .preview-panel {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 210mm !important;
+        height: 100% !important;
+        overflow: hidden !important;
+    }
+
+    /* 실제 인쇄용 프리뷰 캔버스 - 딱 A4 크기로 결착하고 미세 축소 마진 적용 */
+    .a4-page, #resume-preview {
+        display: block !important;
+        position: relative !important;
+        width: 210mm !important;
+        height: 297mm !important;
+        max-height: 297mm !important;
+        padding: 12mm 15mm !important; /* 상하 여백 디톡스로 콤팩트 규정 */
+        margin: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        transform: scale(1) !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+
+        /* 뒤쪽으로 공백 및 여백 장치 누수 방지 */
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+
+    /* 4번 미니멀 템플릿 인쇄 무너짐 대응 단일 스트림화 스케일링 */
+    .template-creative-minimal {
+        display: grid !important;
+        grid-template-columns: 70mm 140mm !important;
+        height: 297mm !important;
+    }
+    .template-creative-minimal .sidebar {
+        background-color: #1e293b !important;
+        color: #f8fafc !important;
+        padding: 12mm 8mm !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .template-creative-minimal .main-content {
+        padding: 12mm 10mm !important;
+    }
+
+    /* 폰트 및 마진 미세 다이어트로 2페이지 밀림 결벽 차단 */
+    #output-resume-content .resume-header { margin-bottom: 4mm !important; }
+    #output-resume-content .preview-section { margin-bottom: 4mm !important; }
+    #output-resume-content h1 { font-size: 20pt !important; margin-bottom: 1.5mm !important; }
+    #output-resume-content h2.section-title { font-size: 12pt !important; margin-bottom: 2mm !important; padding-bottom: 1mm !important; }
+    #output-resume-content h3 { font-size: 10.5pt !important; }
+    #output-resume-content p, #output-resume-content span, #output-resume-content div { 
+        font-size: 9.5pt !important; 
+        line-height: 1.4 !important; 
+    }
+
+    /* 중간 쪼개짐 제어 매핑 */
+    .contact-strip span, .contact-info span, .experience-item, .education-item, .project-item {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+}
