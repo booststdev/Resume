@@ -1,6 +1,6 @@
 # 🚀 Ultimate Multilingual ATS Resume Builder
 
-[Read this in Korean](./README.ko.md)
+[Read this in Korean](./README.KR.md)
 
 **A web-based, all-in-one resume builder optimized for Applicant Tracking Systems (ATS).**
 Create, manage, and export professional resumes directly in your browser without the need for complex document editing software.
