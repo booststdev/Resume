@@ -2,8 +2,10 @@
 
 [Read this in Korean](./README.KR.md)
 
-**A web-based, all-in-one resume builder optimized for Applicant Tracking Systems (ATS).**
+**An ATS (Applicant Tracking System) friendly, all-in-one web-based resume builder.**
 Create, manage, and export professional resumes directly in your browser without the need for complex document editing software.
+
+> **🌐 [Live Demo](https://booststdev.github.io/Resume/)**
 
 ## 🛠 Technical Highlights
 
